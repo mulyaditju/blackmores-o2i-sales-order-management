@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "no-deprecated-features": "error",
+    "valid-naming-conventions": "warn",
+    "no-unresolved-types": "error"
+  }
+}

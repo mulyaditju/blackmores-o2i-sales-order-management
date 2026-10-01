@@ -6,7 +6,7 @@
     "redirect-uris": [
       "https://oauth.pstmn.io/v1/browser-callback"
     ]
-  },  
+  },
   "scopes": [
     {
       "name": "$XSAPPNAME.SalesOrderViewer",

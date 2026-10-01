@@ -1,183 +1,185 @@
 _schema-version: 3.3.0
 ID: blackmores-o2i-sales-order-management
 description: Sales Order Management
-version: 1.0.1
+version: 1.0.2
 modules:
-- name: blackmores-o2i-sales-order-management-srv
-  type: nodejs
-  path: gen/srv
-  requires:
-  - name: blackmores-o2i-sales-order-management-auth
-  - name: blackmores-o2i-sales-order-management-db
-  - name: blackmores-o2i-sales-order-management-dest
-  provides:
-  - name: srv-api
-    properties:
-      srv-url: ${default-url}
-  parameters:
-    buildpack: nodejs_buildpack
-    instances: 1
-    memory: 256M
-  build-parameters:
-    builder: npm-ci
-- name: blackmores-o2i-sales-order-management-db-deployer
-  type: hdb
-  path: gen/db
-  requires:
-  - name: blackmores-o2i-sales-order-management-db
-  parameters:
-    buildpack: nodejs_buildpack
-- name: blackmores-o2i-sales-order-management-app-deployer
-  type: com.sap.application.content
-  path: gen
-  requires:
-  - name: blackmores-o2i-sales-order-management-auth
-  - name: srv-api
-  - name: blackmores-o2i-sales-order-management-html5-repo-host
+  - name: blackmores-o2i-sales-order-management-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: blackmores-o2i-sales-order-management-auth
+      - name: blackmores-o2i-sales-order-management-db
+      - name: blackmores-o2i-sales-order-management-dest
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+      instances: 1
+      memory: 256M
+    build-parameters:
+      builder: npm-ci
+  - name: blackmores-o2i-sales-order-management-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: blackmores-o2i-sales-order-management-db
+    parameters:
+      buildpack: nodejs_buildpack
+  - name: blackmores-o2i-sales-order-management-app-deployer
+    type: com.sap.application.content
+    path: gen
+    requires:
+      - name: blackmores-o2i-sales-order-management-auth
+      - name: srv-api
+      - name: blackmores-o2i-sales-order-management-html5-repo-host
+        parameters:
+          config:
+            HTML5Runtime_enabled: true
+          content-target: true
     parameters:
       config:
-        HTML5Runtime_enabled: true
-      content-target: true
-  parameters:
-    config:
-      destinations:
-      - Authentication: NoAuthentication
-        DynamicDestination: true
-        ForwardAuthToken: true
-        Name: srv-api
-        ProxyType: Internet
-        Type: HTTP
-        URL: ~{srv-api/srv-url}
-  build-parameters:
-    build-result: app/
-    requires:
-    - artifacts:
-      - com-blackmores-o2i-sales-orders.zip
-      name: com-blackmores-o2i-sales-orders
-      target-path: app/
-    - artifacts:
-      - com-blackmores-o2i-sales-orders2.zip
-      name: com-blackmores-o2i-sales-orders2
-      target-path: app/
-- name: blackmores-o2i-sales-order-management-destinations
-  type: com.sap.application.content
-  requires:
-  - name: blackmores-o2i-sales-order-management-auth
-    parameters:
-      service-key:
-        name: blackmores-o2i-sales-order-management-auth-key
-  - name: blackmores-o2i-sales-order-management-html5-repo-host
-    parameters:
-      service-key:
-        name: blackmores-o2i-sales-order-management-html5-repo-host-key
-  - name: srv-api
-  - name: blackmores-o2i-sales-order-management-dest
-    parameters:
-      content-target: true
-  parameters:
-    content:
-      instance:
         destinations:
-        - Name: blackmores-o2i-sales-order-management-html5-repository
-          ServiceInstanceName: blackmores-o2i-sales-order-management-html5-repo-host
-          ServiceKeyName: blackmores-o2i-sales-order-management-html5-repo-host-key
-          sap.cloud.service: blackmores.o2i.salesordermanagement.service
-        - Authentication: OAuth2UserTokenExchange
-          Name: blackmores-o2i-sales-order-management-auth
-          ServiceInstanceName: blackmores-o2i-sales-order-management-auth
-          ServiceKeyName: blackmores-o2i-sales-order-management-auth-key
-          sap.cloud.service: blackmores.o2i.salesordermanagement.service
-        existing_destinations_policy: update
-  build-parameters:
-    no-source: true
-- name: com-blackmores-o2i-sales-orders
-  type: html5
-  path: app/sales-orders-ui
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-- name: com-blackmores-o2i-sales-orders2
-  type: html5
-  path: app/sales-orders2-ui
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
-resources:
-- name: blackmores-o2i-sales-order-management-auth
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      oauth2-configuration:
-        credential-types:
-        - binding-secret
-        - x509
-      role-collections:
-      - description: generated
-        name: SalesOrderViewer (blackmores-o2i-sales-order-management ${org}-${space})
-        role-template-references:
-        - $XSAPPNAME.SalesOrderViewer
-      - description: generated
-        name: SalesOrderEditor (blackmores-o2i-sales-order-management ${org}-${space})
-        role-template-references:
-        - $XSAPPNAME.SalesOrderEditor
-      - description: generated
-        name: SalesOrderManager (blackmores-o2i-sales-order-management ${org}-${space})
-        role-template-references:
-        - $XSAPPNAME.SalesOrderManager
-      tenant-mode: dedicated
-      xsappname: blackmores-o2i-sales-order-management-${org}-${space}
-    path: ./xs-security.json
-    service: xsuaa
-    service-plan: application
-- name: blackmores-o2i-sales-order-management-db
-  type: com.sap.xs.hdi-container
-  parameters:
-    service: hana
-    service-plan: hdi-shared
-- name: blackmores-o2i-sales-order-management-dest
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      HTML5Runtime_enabled: true
-      init_data:
-        instance:
-          destinations:
           - Authentication: NoAuthentication
-            Name: ui5
-            ProxyType: Internet
-            Type: HTTP
-            URL: https://ui5.sap.com
-          - Authentication: NoAuthentication
-            HTML5.DynamicDestination: true
-            HTML5.ForwardAuthToken: true
+            DynamicDestination: true
+            ForwardAuthToken: true
             Name: srv-api
             ProxyType: Internet
             Type: HTTP
             URL: ~{srv-api/srv-url}
+    build-parameters:
+      build-result: app/
+      requires:
+        - artifacts:
+            - com-blackmores-o2i-sales-orders.zip
+          name: com-blackmores-o2i-sales-orders
+          target-path: app/
+        - artifacts:
+            - com-blackmores-o2i-sales-orders2.zip
+          name: com-blackmores-o2i-sales-orders2
+          target-path: app/
+  - name: blackmores-o2i-sales-order-management-destinations
+    type: com.sap.application.content
+    requires:
+      - name: blackmores-o2i-sales-order-management-auth
+        parameters:
+          service-key:
+            name: blackmores-o2i-sales-order-management-auth-key
+      - name: blackmores-o2i-sales-order-management-html5-repo-host
+        parameters:
+          service-key:
+            name: blackmores-o2i-sales-order-management-html5-repo-host-key
+      - name: srv-api
+      - name: blackmores-o2i-sales-order-management-dest
+        parameters:
+          content-target: true
+    parameters:
+      content:
+        instance:
+          destinations:
+            - Name: blackmores-o2i-sales-order-management-html5-repository
+              ServiceInstanceName: blackmores-o2i-sales-order-management-html5-repo-host
+              ServiceKeyName: blackmores-o2i-sales-order-management-html5-repo-host-key
+              sap.cloud.service: blackmores.o2i.salesordermanagement.service
+            - Authentication: OAuth2UserTokenExchange
+              Name: blackmores-o2i-sales-order-management-auth
+              ServiceInstanceName: blackmores-o2i-sales-order-management-auth
+              ServiceKeyName: blackmores-o2i-sales-order-management-auth-key
+              sap.cloud.service: blackmores.o2i.salesordermanagement.service
           existing_destinations_policy: update
-    service: destination
-    service-plan: lite
-  requires:
-  - name: srv-api
-- name: blackmores-o2i-sales-order-management-html5-repo-host
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-plan: app-host
+    build-parameters:
+      no-source: true
+  - name: com-blackmores-o2i-sales-orders
+    type: html5
+    path: app/sales-orders-ui
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+  - name: com-blackmores-o2i-sales-orders2
+    type: html5
+    path: app/sales-orders2-ui
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+resources:
+  - name: blackmores-o2i-sales-order-management-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        oauth2-configuration:
+          credential-types:
+            - binding-secret
+            - x509
+        role-collections:
+          - description: generated
+            name: SalesOrderViewer (blackmores-o2i-sales-order-management ${org}-${space})
+            role-template-references:
+              - $XSAPPNAME.SalesOrderViewer
+          - description: generated
+            name: SalesOrderEditor (blackmores-o2i-sales-order-management ${org}-${space})
+            role-template-references:
+              - $XSAPPNAME.SalesOrderEditor
+          - description: generated
+            name: SalesOrderManager (blackmores-o2i-sales-order-management ${org}-${space})
+            role-template-references:
+              - $XSAPPNAME.SalesOrderManager
+        tenant-mode: dedicated
+        xsappname: blackmores-o2i-sales-order-management-${org}-${space}
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application
+  - name: blackmores-o2i-sales-order-management-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: blackmores-o2i-sales-order-management-dest
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+              - Authentication: NoAuthentication
+                HTML5.DynamicDestination: true
+                HTML5.ForwardAuthToken: true
+                Name: srv-api
+                ProxyType: Internet
+                Type: HTTP
+                URL: ~{srv-api/srv-url}
+            existing_destinations_policy: update
+      service: destination
+      service-plan: lite
+    requires:
+      - name: srv-api
+  - name: blackmores-o2i-sales-order-management-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-  - builder: custom
-    commands:
-    - npm ci
-    - npx cds build --production
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production

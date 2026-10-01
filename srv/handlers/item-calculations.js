@@ -24,7 +24,7 @@ export function registerItemCalculationHandlers(srv) {
   // -------------------------------------------------------------------------
   srv.before(['CREATE', 'UPDATE'], SalesOrderItems, (req) => {
     const item = req.data;
-    if (item.quantity != null && item.unitPrice != null) {
+    if (item.quantity !== null && item.unitPrice !== null) {
       const amounts = calculateItemAmounts(item);
       Object.assign(req.data, amounts);
     }
