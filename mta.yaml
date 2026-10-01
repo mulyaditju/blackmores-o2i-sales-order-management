@@ -1,7 +1,7 @@
 _schema-version: 3.3.0
 ID: blackmores-o2i-sales-order-management
 description: Sales Order Management
-version: 1.0.2
+version: 1.0.3
 modules:
   - name: blackmores-o2i-sales-order-management-srv
     type: nodejs
