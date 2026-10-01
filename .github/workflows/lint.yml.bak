@@ -1,0 +1,35 @@
+name: Code Quality & Lint Check
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-codebase:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository code from GitHub
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22 # Aligns with modern SAP CAP Node runtimes
+          cache: 'npm'     # Caches node_modules automatically for faster runs
+
+      # 3. Install dependencies (including SAP packages)
+      - name: Install Dependencies
+        run: npm ci
+
+      # 4. Install SAP CDS Development Kit globally in the runner
+      - name: Install SAP CDS DK
+        run: npm install -g @sap/cds-dk
+
+      # 5. Execute your strict lint script
+      - name: Run Full-Stack Validation Suite
+        run: npm run lint

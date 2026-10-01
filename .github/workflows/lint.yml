@@ -1,4 +1,4 @@
-name: Code Quality & Lint Check
+name: Full-Stack CAP CI/CD Pipeline
 
 on:
   push:
@@ -7,29 +7,67 @@ on:
     branches: [ main, master ]
 
 jobs:
-  validate-codebase:
+  validate-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for GitHub Releases
 
     steps:
-      # 1. Check out the repository code from GitHub
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Set up Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22 # Aligns with modern SAP CAP Node runtimes
-          cache: 'npm'     # Caches node_modules automatically for faster runs
+          node-version: 22
+          cache: 'npm'
 
-      # 3. Install dependencies (including SAP packages)
       - name: Install Dependencies
         run: npm ci
 
-      # 4. Install SAP CDS Development Kit globally in the runner
-      - name: Install SAP CDS DK
-        run: npm install -g @sap/cds-dk
+      - name: Install SAP Tooling & MBT
+        run: |
+          npm install -g @sap/cds-dk
+          npm install -g mbt
 
-      # 5. Execute your strict lint script
-      - name: Run Full-Stack Validation Suite
+      - name: Run Quality Checks & Linting
         run: npm run lint
+
+      - name: Get Project Version
+        id: get_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - name: Build MTA Archive
+        run: mbt build -t gen/mta_archives/
+
+      - name: Install Cloud Foundry CLI & MTA Plugin
+        if: github.event_name == 'push'
+        run: |
+          wget -q -O - https://cloudfoundry.org | sudo apt-key add -
+          echo "deb https://cloudfoundry.org stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+          cf add-plugin-repo CF-Community https://cloudfoundry.org
+          cf install-plugin multiapps -f
+
+      - name: Deploy to Cloud Foundry (dev space)
+        if: github.event_name == 'push'
+        run: |
+          cf login -a "${{ secrets.BTP_CENTER_URL }}" \
+                   -u "${{ secrets.BTP_USER }}" \
+                   -p "${{ secrets.BTP_PASSWORD }}" \
+                   -o "${{ secrets.BTP_ORG }}" \
+                   -s dev
+          cf deploy gen/mta_archives/*.mtar -f
+
+      - name: Create Production Release & Upload MTAR
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          files: gen/mta_archives/*.mtar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
