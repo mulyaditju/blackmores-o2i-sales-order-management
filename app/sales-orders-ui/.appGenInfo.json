@@ -1,0 +1,32 @@
+{
+  "generationParameters": {
+    "generationDate": "Tue Sep 15 2026 23:30:07 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "Local CAP",
+    "metadataFilename": "",
+    "serviceUrl": "http://localhost:4004/api/v1/sales-order-management/",
+    "appName": "sales-orders",
+    "appTitle": "Sales Orders",
+    "appDescription": "Sales Orders",
+    "appNamespace": "com.blackmores",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.152.0",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": false,
+    "generatorVersion": "1.32.0",
+    "template": "List Report Page V4",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "SalesOrders"
+      },
+      {
+        "type": "Navigation Entity",
+        "value": "items"
+      }
+    ],
+    "launchText": "To launch the generated app, start your CAP project:  and navigate to the following location in your browser:\n\nhttp://localhost:4004/sales-orders/webapp/index.html"
+  }
+}

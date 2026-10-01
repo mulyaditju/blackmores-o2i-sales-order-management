@@ -1,0 +1,100 @@
+{
+  "name": "blackmores-o2i-sales-order-management",
+  "version": "1.0.1",
+  "type": "module",
+  "dependencies": {
+    "@cap-js/hana": "^3",
+    "@sap/cds": "^10.1.0",
+    "@sap/xssec": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^3",
+    "@jest/globals": "^29",
+    "@sap/cds-dk": "^10",
+    "cds-plugin-ui5": "^0.17.0",
+    "jest": "^29",
+    "mbt": "^1.2.49",
+    "rimraf": "^5.0.5"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch --profile development",
+    "lint": "cds-lint . && eslint . --max-warnings 0",
+    "format:check": "prettier --check \"**/*.{js,json,md,cds}\"",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "watch-sales-orders": "cds watch --open com.blackmores.o2i.salesorders/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "undeploy": "cf undeploy blackmores-o2i-sales-order-management --delete-services --delete-service-keys --delete-service-brokers",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-salesorders2": "cds watch --open com.blackmores.o2i.salesorders2/index.html?sap-ui-xx-viewCache=false --livereload false"
+  },
+  "private": true,
+  "jest": {
+    "transform": {},
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*.test.js"
+    ]
+  },
+  "cds": {
+    "requires": {
+      "[production]": {
+        "auth": "xsuaa",
+        "db": "hana",
+        "destinations": true,
+        "html5-repo": true
+      },
+      "[development]": {
+        "auth": {
+          "kind": "mocked",
+          "users": {
+            "viewer": {
+              "password": "viewer",
+              "roles": [
+                "SalesOrderViewer"
+              ],
+              "attr": {
+                "SalesOrg": "AU01"
+              }
+            },
+            "editor": {
+              "password": "editor",
+              "roles": [
+                "SalesOrderViewer",
+                "SalesOrderEditor"
+              ],
+              "attr": {
+                "SalesOrg": "AU01"
+              }
+            },
+            "manager": {
+              "password": "manager",
+              "roles": [
+                "SalesOrderViewer",
+                "SalesOrderEditor",
+                "SalesOrderManager"
+              ],
+              "attr": {
+                "SalesOrg": "AU01"
+              }
+            }
+          }
+        },
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": ":memory:"
+          }
+        }
+      },
+      "workzone": true
+    }
+  },
+  "workspaces": [
+    "app/*"
+  ],
+  "sapux": [
+    "app/sales-orders-ui",
+    "app/sales-orders2-ui"
+  ]
+}

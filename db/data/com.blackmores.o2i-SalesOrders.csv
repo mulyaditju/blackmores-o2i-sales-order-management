@@ -1,0 +1,6 @@
+ID,orderNumber,customerName,customerEmail,orderDate,requestedDelivery,salesOrg,distributionChannel,division,netAmount,grossAmount,taxAmount,currency,s4DocumentNumber,s4CreatedByUser,status_code,priority_code,isBlocked,isCreditHold,hasAttachments
+550e8400-e29b-41d4-a716-446655440001,SO-2024-0001,Chemist Warehouse Pty Ltd,orders@chemistwarehouse.com.au,2024-01-15,2024-01-22,1000,10,00,9090.91,10000.00,909.09,AUD,4500000001,JSMITH,NW,H,false,false,false
+550e8400-e29b-41d4-a716-446655440002,SO-2024-0002,Priceline Pharmacy,procurement@priceline.com.au,2024-01-16,2024-01-25,1000,10,00,4545.45,5000.00,454.55,AUD,4500000002,JSMITH,IP,M,false,false,true
+550e8400-e29b-41d4-a716-446655440003,SO-2024-0003,Terry White Chemists,orders@terrywhite.com.au,2024-01-17,2024-01-30,1000,20,00,18181.82,20000.00,1818.18,AUD,4500000003,MBROWN,DL,M,false,false,false
+550e8400-e29b-41d4-a716-446655440004,SO-2024-0004,Amcal Pharmacy,purchasing@amcal.com.au,2024-01-18,2024-02-01,1000,10,00,2727.27,3000.00,272.73,AUD,,MBROWN,NW,L,true,false,false
+550e8400-e29b-41d4-a716-446655440005,SO-2024-0005,Blooms The Chemist,orders@blooms.com.au,2024-01-19,2024-02-05,1000,20,00,6363.64,7000.00,636.36,AUD,4500000005,ALEE,CO,L,false,false,false

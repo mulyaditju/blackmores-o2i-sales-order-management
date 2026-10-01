@@ -1,0 +1,5 @@
+ID,order_ID,noteType,noteText,isInternal
+770e8400-e29b-41d4-a716-446655440001,550e8400-e29b-41d4-a716-446655440001,CUSTOMER,Please ensure cold-chain delivery for all vitamin products.,false
+770e8400-e29b-41d4-a716-446655440002,550e8400-e29b-41d4-a716-446655440001,INTERNAL,Customer has negotiated a 5% volume discount - check pricing before dispatch.,true
+770e8400-e29b-41d4-a716-446655440003,550e8400-e29b-41d4-a716-446655440002,CUSTOMER,Delivery to loading dock B only. Contact store manager on arrival.,false
+770e8400-e29b-41d4-a716-446655440004,550e8400-e29b-41d4-a716-446655440004,INTERNAL,Order blocked pending credit approval from finance team.,true

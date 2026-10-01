@@ -1,0 +1,5 @@
+code,name,descr
+OS,Out of Stock,Product is currently not available in inventory
+PM,Price Mismatch,Quoted price does not match agreed contract price
+CR,Customer Request,Customer has requested cancellation
+OT,Other,Other reason for rejection

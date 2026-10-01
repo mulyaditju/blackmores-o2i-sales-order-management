@@ -1,0 +1,6 @@
+code,name,descr
+NW,New,Order has been created and is awaiting processing
+IP,In Process,Order is being processed
+DL,Delivered,Order has been delivered to the customer
+CA,Cancelled,Order has been cancelled
+CO,Completed,Order has been completed and closed

@@ -1,0 +1,67 @@
+{
+  "xsappname": "blkm-btp-order",
+  "tenant-mode": "dedicated",
+  "description": "Blackmores Sales Order Processing – Security Descriptor",
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "https://oauth.pstmn.io/v1/browser-callback"
+    ]
+  },  
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.SalesOrderViewer",
+      "description": "Read-only access to sales orders"
+    },
+    {
+      "name": "$XSAPPNAME.SalesOrderEditor",
+      "description": "Create and update sales orders and line items"
+    },
+    {
+      "name": "$XSAPPNAME.SalesOrderManager",
+      "description": "Full access including cancellation, credit hold release, and deletion"
+    }
+  ],
+  "attributes": [
+    {
+      "name": "SalesOrg",
+      "description": "Sales Organisation the user belongs to",
+      "valueType": "string"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "SalesOrderViewer",
+      "description": "Read-only access to sales orders",
+      "scope-references": [
+        "$XSAPPNAME.SalesOrderViewer"
+      ],
+      "attribute-references": [
+        "SalesOrg"
+      ]
+    },
+    {
+      "name": "SalesOrderEditor",
+      "description": "Create and update sales orders",
+      "scope-references": [
+        "$XSAPPNAME.SalesOrderViewer",
+        "$XSAPPNAME.SalesOrderEditor"
+      ],
+      "attribute-references": [
+        "SalesOrg"
+      ]
+    },
+    {
+      "name": "SalesOrderManager",
+      "description": "Full access to sales order management",
+      "scope-references": [
+        "$XSAPPNAME.SalesOrderViewer",
+        "$XSAPPNAME.SalesOrderEditor",
+        "$XSAPPNAME.SalesOrderManager"
+      ],
+      "attribute-references": [
+        "SalesOrg"
+      ]
+    }
+  ],
+  "authorities-inheritance": false
+}
