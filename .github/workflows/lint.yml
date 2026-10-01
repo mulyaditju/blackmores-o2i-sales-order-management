@@ -40,14 +40,18 @@ jobs:
       - name: Build MTA Archive
         run: mbt build -t gen/mta_archives/
 
-      - name: Install Cloud Foundry CLI & MTA Plugin
+      # 👇 REPLACED HAND-WRITTEN APT SETUP WITH AUTOMATED EXTENSION
+      - name: Install Cloud Foundry CLI
+        if: github.event_name == 'push'
+        uses: jvalkeal/setup-cf-cli@v0
+        with:
+          version: 8.14.1 # Explicitly targets production-grade CF v8
+
+      # 👇 Added step to install the crucial multiapps plugin for MTA archives
+      - name: Install CF MTA Plugin
         if: github.event_name == 'push'
         run: |
-          wget -q -O - https://cloudfoundry.org | sudo apt-key add -
-          echo "deb https://cloudfoundry.org stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          sudo apt-get update
-          sudo apt-get install cf8-cli
-          cf add-plugin-repo CF-Community https://cloudfoundry.org
+          cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
           cf install-plugin multiapps -f
 
       - name: Deploy to Cloud Foundry (dev space)
