@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # Aligns with modern SAP CAP Node runtimes
+          node-version: 22 # Aligns with modern SAP CAP Node runtimes
           cache: 'npm'     # Caches node_modules automatically for faster runs
 
       # 3. Install dependencies (including SAP packages)
