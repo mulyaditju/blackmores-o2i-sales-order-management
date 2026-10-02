@@ -45,7 +45,16 @@ export default [
       ...cdsPlugin.configs.recommended.rules, 
       "no-console": "warn",
       "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-      "eqeqeq": "error",
+      "no-await-in-loop":      "error",
+      "require-await":         "warn",
+      "no-return-await":       "error",
+      "eqeqeq":                ["error", "always"],
+      "prefer-const":          "error",
+      "no-var":                "error",
+      "complexity":            ["error", 12],
+      "max-lines-per-function":["warn", 210],
+      "max-depth":             ["error", 3],
+      "camelcase":             ["error", { "properties": "never", "allow": ["^[a-z]+_[a-z]+$"] }],
       
       // Optional: Turn on specialized SAP Editor rules via the CLI
       "@sap/cds/valid-csv-header": ["warn", "show"]

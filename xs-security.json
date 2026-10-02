@@ -1,67 +1,43 @@
 {
-  "xsappname": "blkm-btp-order",
-  "tenant-mode": "dedicated",
-  "description": "Blackmores Sales Order Processing – Security Descriptor",
-  "oauth2-configuration": {
-    "redirect-uris": [
-      "https://oauth.pstmn.io/v1/browser-callback"
-    ]
-  },
   "scopes": [
     {
       "name": "$XSAPPNAME.SalesOrderViewer",
-      "description": "Read-only access to sales orders"
+      "description": "SalesOrderViewer"
     },
     {
       "name": "$XSAPPNAME.SalesOrderEditor",
-      "description": "Create and update sales orders and line items"
+      "description": "SalesOrderEditor"
     },
     {
       "name": "$XSAPPNAME.SalesOrderManager",
-      "description": "Full access including cancellation, credit hold release, and deletion"
+      "description": "SalesOrderManager"
     }
   ],
-  "attributes": [
-    {
-      "name": "SalesOrg",
-      "description": "Sales Organisation the user belongs to",
-      "valueType": "string"
-    }
-  ],
+  "attributes": [],
   "role-templates": [
     {
       "name": "SalesOrderViewer",
-      "description": "Read-only access to sales orders",
+      "description": "generated",
       "scope-references": [
         "$XSAPPNAME.SalesOrderViewer"
       ],
-      "attribute-references": [
-        "SalesOrg"
-      ]
+      "attribute-references": []
     },
     {
       "name": "SalesOrderEditor",
-      "description": "Create and update sales orders",
+      "description": "generated",
       "scope-references": [
-        "$XSAPPNAME.SalesOrderViewer",
         "$XSAPPNAME.SalesOrderEditor"
       ],
-      "attribute-references": [
-        "SalesOrg"
-      ]
+      "attribute-references": []
     },
     {
       "name": "SalesOrderManager",
-      "description": "Full access to sales order management",
+      "description": "generated",
       "scope-references": [
-        "$XSAPPNAME.SalesOrderViewer",
-        "$XSAPPNAME.SalesOrderEditor",
         "$XSAPPNAME.SalesOrderManager"
       ],
-      "attribute-references": [
-        "SalesOrg"
-      ]
+      "attribute-references": []
     }
-  ],
-  "authorities-inheritance": false
+  ]
 }
