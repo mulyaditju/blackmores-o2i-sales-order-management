@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1791265488777" clover="3.2.0">
-  <project timestamp="1791265488777" name="All files">
+<coverage generated="1791265575389" clover="3.2.0">
+  <project timestamp="1791265575389" name="All files">
     <metrics statements="18" coveredstatements="18" conditionals="14" coveredconditionals="10" methods="6" coveredmethods="6" elements="38" coveredelements="34" complexity="0" loc="18" ncloc="18" packages="1" files="1" classes="1"/>
     <file name="order-calculations.js" path="/home/user/projects/blackmores-o2i-sales-order-management/srv/lib/order-calculations.js">
       <metrics statements="18" coveredstatements="18" conditionals="14" coveredconditionals="10" methods="6" coveredmethods="6"/>
