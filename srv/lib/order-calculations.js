@@ -77,7 +77,7 @@ export function validateOrderMandatoryFields(order) {
     'orderNumber',
     'customerName',
     'orderDate',
-    'salesOrg',
+    'salesOrganisation',
     'distributionChannel',
   ];
   return required.filter(field => !order[field]);
