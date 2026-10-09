@@ -15,59 +15,76 @@
  * ╚═══════════════════════════════════════════════════════════════════════╝ *
  ******************************************************************************/
 
-sap.ui.define([
-    "sap/ui/test/opaQunit",
-    "./pages/JourneyRunner"
-], function (opaTest, runner) {
-    "use strict";
+sap.ui.define(["sap/ui/test/opaQunit", "./pages/JourneyRunner"], function (opaTest, runner) {
+  "use strict";
 
-    function journey() {
-        QUnit.module("SalesOrdersListListReport journey");
+  function journey() {
+    QUnit.module("SalesOrdersListListReport journey");
 
-        const defaultTableId = "";
+    const defaultTableId = "";
 
-        opaTest("Start application", function (Given, When, Then) {
-            Given.iStartMyApp();
+    opaTest("Start application", function (Given, When, Then) {
+      Given.iStartMyApp();
 
-            Then.onTheSalesOrdersListGenerated.iSeeThisPage();
-        });
+      Then.onTheSalesOrdersListGenerated.iSeeThisPage();
+    });
 
-        opaTest("Check filter bar", function (Given, When, Then) {
-            Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "orderNumber" });
-            Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "customerName" });
-            Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "status_code" });
-            Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "priority_code" });
-            Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "salesOrg" });
-            Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "orderDate" });
-            Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "isBlocked" });
-        });
+    opaTest("Check filter bar", function (Given, When, Then) {
+      Then.onTheSalesOrdersListGenerated
+        .onFilterBar()
+        .iCheckFilterField({ property: "orderNumber" });
+      Then.onTheSalesOrdersListGenerated
+        .onFilterBar()
+        .iCheckFilterField({ property: "customerName" });
+      Then.onTheSalesOrdersListGenerated
+        .onFilterBar()
+        .iCheckFilterField({ property: "status_code" });
+      Then.onTheSalesOrdersListGenerated
+        .onFilterBar()
+        .iCheckFilterField({ property: "priority_code" });
+      Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "salesOrg" });
+      Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "orderDate" });
+      Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckFilterField({ property: "isBlocked" });
+    });
 
-        // Note: this test will only work if the ListReport page has a search field and shows data that matches the search term. Please ensure that the test data and search term are set up accordingly.
-        // opaTest("Perform a global search and check the result", function (Given, When, Then) {
-        //     When.onTheSalesOrdersListGenerated.onFilterBar().iChangeSearchField("Search Term");
-        //     When.onTheSalesOrdersListGenerated.onFilterBar().iExecuteSearch();
-        //     Then.onTheSalesOrdersListGenerated.onTable(defaultTableId).iCheckRows();
-        //     When.onTheSalesOrdersListGenerated.onFilterBar().iChangeSearchField(undefined);
-        //     Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckSearchField(undefined);
-        // });
+    // Note: this test will only work if the ListReport page has a search field and shows data that matches the search term. Please ensure that the test data and search term are set up accordingly.
+    // opaTest("Perform a global search and check the result", function (Given, When, Then) {
+    //     When.onTheSalesOrdersListGenerated.onFilterBar().iChangeSearchField("Search Term");
+    //     When.onTheSalesOrdersListGenerated.onFilterBar().iExecuteSearch();
+    //     Then.onTheSalesOrdersListGenerated.onTable(defaultTableId).iCheckRows();
+    //     When.onTheSalesOrdersListGenerated.onFilterBar().iChangeSearchField(undefined);
+    //     Then.onTheSalesOrdersListGenerated.onFilterBar().iCheckSearchField(undefined);
+    // });
 
-        opaTest("Check table columns and actions", function (Given, When, Then) {
-            Then.onTheSalesOrdersListGenerated.onTable(defaultTableId).iCheckColumns(undefined, {"orderNumber":{"header":"Order Number"},"customerName":{"header":"Customer"},"orderDate":{"header":"Order Date"},"requestedDelivery":{"header":"Requested Delivery"},"status_code":{"header":"Status"},"priority_code":{"header":"Priority"},"grossAmount":{"header":"Gross Amount"},"currency":{"header":"Currency"},"salesOrg":{"header":"Sales Org"},"DataFieldForAction::SalesOrderManagementService.submitOrder":{"header":"Submit"},"DataFieldForAction::SalesOrderManagementService.cancelOrder":{"header":"Cancel"}});
-        });
+    opaTest("Check table columns and actions", function (Given, When, Then) {
+      Then.onTheSalesOrdersListGenerated.onTable(defaultTableId).iCheckColumns(undefined, {
+        orderNumber: { header: "Order Number" },
+        customerName: { header: "Customer" },
+        orderDate: { header: "Order Date" },
+        requestedDelivery: { header: "Requested Delivery" },
+        status_code: { header: "Status" },
+        priority_code: { header: "Priority" },
+        grossAmount: { header: "Gross Amount" },
+        currency: { header: "Currency" },
+        salesOrg: { header: "Sales Org" },
+        "DataFieldForAction::SalesOrderManagementService.submitOrder": { header: "Submit" },
+        "DataFieldForAction::SalesOrderManagementService.cancelOrder": { header: "Cancel" }
+      });
+    });
 
-        opaTest("Navigate to ObjectPage", function (Given, When, Then) {
-            // Note: this test will fail if the ListReport page doesn't show any data
-            When.onTheSalesOrdersListGenerated.onFilterBar().iExecuteSearch();
-            Then.onTheSalesOrdersListGenerated.onTable(defaultTableId).iCheckRows();
-            When.onTheSalesOrdersListGenerated.onTable(defaultTableId).iPressRow(0);
-            Then.onTheSalesOrdersObjectPageGenerated.iSeeThisPage();
-        });
+    opaTest("Navigate to ObjectPage", function (Given, When, Then) {
+      // Note: this test will fail if the ListReport page doesn't show any data
+      When.onTheSalesOrdersListGenerated.onFilterBar().iExecuteSearch();
+      Then.onTheSalesOrdersListGenerated.onTable(defaultTableId).iCheckRows();
+      When.onTheSalesOrdersListGenerated.onTable(defaultTableId).iPressRow(0);
+      Then.onTheSalesOrdersObjectPageGenerated.iSeeThisPage();
+    });
 
-        opaTest("Teardown", function (Given, When, Then) {
-            // Cleanup
-            Given.iTearDownMyApp();
-        });
-    }
+    opaTest("Teardown", function (Given, When, Then) {
+      // Cleanup
+      Given.iTearDownMyApp();
+    });
+  }
 
-    runner.run([journey]);
+  runner.run([journey]);
 });

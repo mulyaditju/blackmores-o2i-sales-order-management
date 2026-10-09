@@ -3,11 +3,11 @@
 // Service manifest – handler registration ONLY.
 // No inline business logic. All logic lives in srv/handlers/ and srv/lib/.
 // =============================================================================
-import cds from '@sap/cds';
+import cds from "@sap/cds";
 
-import { registerOrderLifecycleHandlers }  from './handlers/order-lifecycle.js';
-import { registerItemCalculationHandlers } from './handlers/item-calculations.js';
-import { registerFunctionHandlers }        from './handlers/order-functions.js';
+import { registerOrderLifecycleHandlers } from "./handlers/order-lifecycle.js";
+import { registerItemCalculationHandlers } from "./handlers/item-calculations.js";
+import { registerFunctionHandlers } from "./handlers/order-functions.js";
 
 export class SalesOrderManagementService extends cds.ApplicationService {
   async init() {

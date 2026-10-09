@@ -11,12 +11,12 @@
  * @returns {{ netAmount: number, taxAmount: number, grossAmount: number }}
  */
 export function calculateItemAmounts(item) {
-  const quantity  = Number(item.quantity  ?? 0);
+  const quantity = Number(item.quantity ?? 0);
   const unitPrice = Number(item.unitPrice ?? 0);
-  const taxRate   = Number(item.taxRate   ?? 10);
+  const taxRate = Number(item.taxRate ?? 10);
 
-  const netAmount   = Math.round(quantity * unitPrice * 100) / 100;
-  const taxAmount   = Math.round(netAmount * (taxRate / 100) * 100) / 100;
+  const netAmount = Math.round(quantity * unitPrice * 100) / 100;
+  const taxAmount = Math.round(netAmount * (taxRate / 100) * 100) / 100;
   const grossAmount = Math.round((netAmount + taxAmount) * 100) / 100;
 
   return { netAmount, taxAmount, grossAmount };
@@ -31,8 +31,8 @@ export function calculateItemAmounts(item) {
 export function rollUpOrderAmounts(items) {
   const totals = items.reduce(
     (acc, item) => {
-      acc.netAmount   += Number(item.netAmount   ?? 0);
-      acc.taxAmount   += Number(item.taxAmount   ?? 0);
+      acc.netAmount += Number(item.netAmount ?? 0);
+      acc.taxAmount += Number(item.taxAmount ?? 0);
       acc.grossAmount += Number(item.grossAmount ?? 0);
       return acc;
     },
@@ -40,9 +40,9 @@ export function rollUpOrderAmounts(items) {
   );
 
   return {
-    netAmount:   Math.round(totals.netAmount   * 100) / 100,
-    taxAmount:   Math.round(totals.taxAmount   * 100) / 100,
-    grossAmount: Math.round(totals.grossAmount * 100) / 100,
+    netAmount: Math.round(totals.netAmount * 100) / 100,
+    taxAmount: Math.round(totals.taxAmount * 100) / 100,
+    grossAmount: Math.round(totals.grossAmount * 100) / 100
   };
 }
 
@@ -55,11 +55,11 @@ export function rollUpOrderAmounts(items) {
  */
 export function isValidStatusTransition(currentStatus, targetStatus) {
   const ALLOWED_TRANSITIONS = {
-    NW: ['IP', 'CA'],
-    IP: ['DL', 'CA'],
-    DL: ['CO'],
+    NW: ["IP", "CA"],
+    IP: ["DL", "CA"],
+    DL: ["CO"],
     CO: [],
-    CA: [],
+    CA: []
   };
 
   const allowed = ALLOWED_TRANSITIONS[currentStatus] ?? [];
@@ -73,12 +73,6 @@ export function isValidStatusTransition(currentStatus, targetStatus) {
  * @returns {string[]} Array of missing field names (empty = valid)
  */
 export function validateOrderMandatoryFields(order) {
-  const required = [
-    'orderNumber',
-    'customerName',
-    'orderDate',
-    'salesOrg',
-    'distributionChannel',
-  ];
-  return required.filter(field => !order[field]);
+  const required = ["orderNumber", "customerName", "orderDate", "salesOrg", "distributionChannel"];
+  return required.filter((field) => !order[field]);
 }

@@ -8,28 +8,29 @@
     "@sap/xssec": "^4"
   },
   "devDependencies": {
+    "@cap-js/cds-test": "^1.0.2",
     "@cap-js/sqlite": "^3",
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
     "@eslint/js": "^10.0.1",
-    "@jest/globals": "^29",
     "@sap/cds-dk": "^10",
     "@sap/eslint-plugin-cds": "^4",
+    "@vitest/coverage-v8": "^5.0.3",
     "cds-plugin-ui5": "^0.17.0",
     "eslint": "^10.11.0",
-    "eslint-plugin-jest": "^29.16.6",
     "globals": "^17.13.0",
     "husky": "^9.1.7",
-    "jest": "^29",
     "mbt": "^1.2.49",
-    "rimraf": "^5.0.5"
+    "rimraf": "^5.0.5",
+    "vite": "^6.4.4",
+    "vitest": "^5.0.3"
   },
   "scripts": {
     "start": "cds-serve",
     "watch": "cds watch --profile development",
     "lint": "cds lint . && eslint . --max-warnings 0",
     "format:check": "prettier --check \"**/*.{js,json,md,cds}\"",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand",
+    "test": "vitest run --coverage --fileParallelism=false",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "watch-sales-orders": "cds watch --open com.blackmores.o2i.salesorders/index.html?sap-ui-xx-viewCache=false --livereload false",
     "undeploy": "cf undeploy blackmores-o2i-sales-order-management --delete-services --delete-service-keys --delete-service-brokers",
@@ -38,13 +39,6 @@
     "prepare": "husky"
   },
   "private": true,
-  "jest": {
-    "transform": {},
-    "testEnvironment": "node",
-    "testMatch": [
-      "**/test/**/*.test.js"
-    ]
-  },
   "cds": {
     "requires": {
       "[production]": {

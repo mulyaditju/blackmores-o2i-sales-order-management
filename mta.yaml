@@ -99,8 +99,7 @@ modules:
       commands:
         - npm install
         - npm run build:cf
-      supported-platforms:
-        []
+      supported-platforms: []
   - name: com-blackmores-o2i-sales-orders2
     type: html5
     path: app/sales-orders2-ui
@@ -110,8 +109,7 @@ modules:
       commands:
         - npm install
         - npm run build:cf
-      supported-platforms:
-        []
+      supported-platforms: []
 resources:
   - name: blackmores-o2i-sales-order-management-auth
     type: org.cloudfoundry.managed-service

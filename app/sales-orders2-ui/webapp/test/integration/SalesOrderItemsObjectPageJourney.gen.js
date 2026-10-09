@@ -15,67 +15,109 @@
  * ╚═══════════════════════════════════════════════════════════════════════╝ *
  ******************************************************************************/
 
-sap.ui.define([
-    "sap/ui/test/opaQunit",
-    "./pages/JourneyRunner"
-], function (opaTest, runner) {
-    "use strict";
+sap.ui.define(["sap/ui/test/opaQunit", "./pages/JourneyRunner"], function (opaTest, runner) {
+  "use strict";
 
-    function journey() {
-        QUnit.module("SalesOrderItemsObjectPageObjectPage journey");
+  function journey() {
+    QUnit.module("SalesOrderItemsObjectPageObjectPage journey");
 
-        opaTest("Navigate to SalesOrderItemsObjectPageObjectPage", function (Given, When, Then) {
-            Given.iStartMyApp();
-            When.onTheSalesOrdersListGenerated.onFilterBar().iExecuteSearch();
-            Then.onTheSalesOrdersListGenerated.onTable().iCheckRows();
-            When.onTheSalesOrdersListGenerated.onTable().iPressRow(0);
+    opaTest("Navigate to SalesOrderItemsObjectPageObjectPage", function (Given, When, Then) {
+      Given.iStartMyApp();
+      When.onTheSalesOrdersListGenerated.onFilterBar().iExecuteSearch();
+      Then.onTheSalesOrdersListGenerated.onTable().iCheckRows();
+      When.onTheSalesOrdersListGenerated.onTable().iPressRow(0);
 
-            Then.onTheSalesOrdersObjectPageGenerated.iSeeThisPage();
-            Then.onTheSalesOrdersObjectPageGenerated.onTable({ property: "items" }).iCheckRows();
-            When.onTheSalesOrdersObjectPageGenerated.onTable({ property: "items" }).iPressRow(0);
+      Then.onTheSalesOrdersObjectPageGenerated.iSeeThisPage();
+      Then.onTheSalesOrdersObjectPageGenerated.onTable({ property: "items" }).iCheckRows();
+      When.onTheSalesOrdersObjectPageGenerated.onTable({ property: "items" }).iPressRow(0);
 
-            Then.onTheSalesOrderItemsObjectPageGenerated.iSeeThisPage();
+      Then.onTheSalesOrderItemsObjectPageGenerated.iSeeThisPage();
+    });
+
+    opaTest("Check the number of sections of the Object Page", function (_Given, _When, Then) {
+      Then.onTheSalesOrderItemsObjectPageGenerated.iCheckNumberOfSections(3);
+    });
+
+    opaTest(
+      "Check the FieldGroup::ItemDetails section of the Object Page",
+      function (_Given, When, Then) {
+        When.onTheSalesOrderItemsObjectPageGenerated.iGoToSection({
+          section: "FieldGroup::ItemDetails"
         });
-
-
-
-        opaTest("Check the number of sections of the Object Page", function (_Given, _When, Then) {
-            Then.onTheSalesOrderItemsObjectPageGenerated.iCheckNumberOfSections(3);
+        Then.onTheSalesOrderItemsObjectPageGenerated.iCheckSection({
+          section: "FieldGroup::ItemDetails"
         });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemDetails" })
+          .iCheckField({ property: "itemNumber" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemDetails" })
+          .iCheckField({ property: "productId" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemDetails" })
+          .iCheckField({ property: "productDescription" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemDetails" })
+          .iCheckField({ property: "quantity" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemDetails" })
+          .iCheckField({ property: "unitOfMeasure" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemDetails" })
+          .iCheckField({ property: "unitPrice" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemDetails" })
+          .iCheckField({ property: "taxRate" });
+      }
+    );
 
-        opaTest("Check the FieldGroup::ItemDetails section of the Object Page", function (_Given, When, Then) {
-            When.onTheSalesOrderItemsObjectPageGenerated.iGoToSection({ section: "FieldGroup::ItemDetails" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.iCheckSection({ section: "FieldGroup::ItemDetails" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemDetails" }).iCheckField({ property: "itemNumber" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemDetails" }).iCheckField({ property: "productId" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemDetails" }).iCheckField({ property: "productDescription" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemDetails" }).iCheckField({ property: "quantity" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemDetails" }).iCheckField({ property: "unitOfMeasure" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemDetails" }).iCheckField({ property: "unitPrice" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemDetails" }).iCheckField({ property: "taxRate" });
+    opaTest(
+      "Check the FieldGroup::ItemAmounts section of the Object Page",
+      function (_Given, When, Then) {
+        When.onTheSalesOrderItemsObjectPageGenerated.iGoToSection({
+          section: "FieldGroup::ItemAmounts"
         });
-
-        opaTest("Check the FieldGroup::ItemAmounts section of the Object Page", function (_Given, When, Then) {
-            When.onTheSalesOrderItemsObjectPageGenerated.iGoToSection({ section: "FieldGroup::ItemAmounts" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.iCheckSection({ section: "FieldGroup::ItemAmounts" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemAmounts" }).iCheckField({ property: "netAmount" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemAmounts" }).iCheckField({ property: "taxAmount" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemAmounts" }).iCheckField({ property: "grossAmount" });
+        Then.onTheSalesOrderItemsObjectPageGenerated.iCheckSection({
+          section: "FieldGroup::ItemAmounts"
         });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemAmounts" })
+          .iCheckField({ property: "netAmount" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemAmounts" })
+          .iCheckField({ property: "taxAmount" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemAmounts" })
+          .iCheckField({ property: "grossAmount" });
+      }
+    );
 
-        opaTest("Check the FieldGroup::ItemStatus section of the Object Page", function (_Given, When, Then) {
-            When.onTheSalesOrderItemsObjectPageGenerated.iGoToSection({ section: "FieldGroup::ItemStatus" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.iCheckSection({ section: "FieldGroup::ItemStatus" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemStatus" }).iCheckField({ property: "isRejected" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemStatus" }).iCheckField({ property: "rejectionReason_code" });
-            Then.onTheSalesOrderItemsObjectPageGenerated.onForm({ section: "FieldGroup::ItemStatus" }).iCheckField({ property: "s4ItemNumber" });
+    opaTest(
+      "Check the FieldGroup::ItemStatus section of the Object Page",
+      function (_Given, When, Then) {
+        When.onTheSalesOrderItemsObjectPageGenerated.iGoToSection({
+          section: "FieldGroup::ItemStatus"
         });
-
-        opaTest("Teardown", function (Given, When, Then) { 
-            // Cleanup
-            Given.iTearDownMyApp();
+        Then.onTheSalesOrderItemsObjectPageGenerated.iCheckSection({
+          section: "FieldGroup::ItemStatus"
         });
-    }
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemStatus" })
+          .iCheckField({ property: "isRejected" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemStatus" })
+          .iCheckField({ property: "rejectionReason_code" });
+        Then.onTheSalesOrderItemsObjectPageGenerated
+          .onForm({ section: "FieldGroup::ItemStatus" })
+          .iCheckField({ property: "s4ItemNumber" });
+      }
+    );
 
-    runner.run([journey]);
+    opaTest("Teardown", function (Given, When, Then) {
+      // Cleanup
+      Given.iTearDownMyApp();
+    });
+  }
+
+  runner.run([journey]);
 });

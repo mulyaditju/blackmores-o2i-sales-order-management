@@ -15,20 +15,20 @@
  * ╚═══════════════════════════════════════════════════════════════════════╝ *
  ******************************************************************************/
 
-sap.ui.define(['sap/fe/test/ListReport'], function(ListReport) {
-    'use strict';
+sap.ui.define(["sap/fe/test/ListReport"], function (ListReport) {
+  "use strict";
 
-    const CustomPageDefinitions = {
-        actions: {},
-        assertions: {}
-    };
+  const CustomPageDefinitions = {
+    actions: {},
+    assertions: {}
+  };
 
-    return new ListReport(
-        {
-            appId: 'com.blackmores.o2i.salesorders2',
-            componentId: 'SalesOrdersList',
-            contextPath: '/SalesOrders'
-        },
-        CustomPageDefinitions
-    );
+  return new ListReport(
+    {
+      appId: "com.blackmores.o2i.salesorders2",
+      componentId: "SalesOrdersList",
+      contextPath: "/SalesOrders"
+    },
+    CustomPageDefinitions
+  );
 });

@@ -15,118 +15,156 @@
  * ╚═══════════════════════════════════════════════════════════════════════╝ *
  ******************************************************************************/
 
-sap.ui.define([
-    "sap/ui/test/opaQunit",
-    "./pages/JourneyRunner"
-], function (opaTest, runner) {
-    "use strict";
+sap.ui.define(["sap/ui/test/opaQunit", "./pages/JourneyRunner"], function (opaTest, runner) {
+  "use strict";
 
-    function journey() {
-        QUnit.module("SalesOrdersObjectPageObjectPage journey");
+  function journey() {
+    QUnit.module("SalesOrdersObjectPageObjectPage journey");
 
-        opaTest("Navigate to SalesOrdersObjectPageObjectPage", function (Given, When, Then) {
-            Given.iStartMyApp();
-            When.onTheSalesOrdersListGenerated.onFilterBar().iExecuteSearch();
-            Then.onTheSalesOrdersListGenerated.onTable().iCheckRows();
-            When.onTheSalesOrdersListGenerated.onTable().iPressRow(0);
+    opaTest("Navigate to SalesOrdersObjectPageObjectPage", function (Given, When, Then) {
+      Given.iStartMyApp();
+      When.onTheSalesOrdersListGenerated.onFilterBar().iExecuteSearch();
+      Then.onTheSalesOrdersListGenerated.onTable().iCheckRows();
+      When.onTheSalesOrdersListGenerated.onTable().iPressRow(0);
 
-            Then.onTheSalesOrdersObjectPageGenerated.iSeeThisPage();
-        });
+      Then.onTheSalesOrdersObjectPageGenerated.iSeeThisPage();
+    });
 
+    opaTest("Check header facets of the Object Page", function (Given, When, Then) {
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onHeader()
+        .iCheckHeaderFacet({ facetId: "FieldGroup::Amounts" });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Amounts",
+        field: "netAmount",
+        targetAnnotation: ""
+      });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Amounts",
+        field: "taxAmount",
+        targetAnnotation: ""
+      });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Amounts",
+        field: "grossAmount",
+        targetAnnotation: ""
+      });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Amounts",
+        field: "currency",
+        targetAnnotation: ""
+      });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onHeader()
+        .iCheckHeaderFacet({ facetId: "FieldGroup::Status" });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Status",
+        field: "status_code",
+        targetAnnotation: ""
+      });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Status",
+        field: "priority_code",
+        targetAnnotation: ""
+      });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Status",
+        field: "isBlocked",
+        targetAnnotation: ""
+      });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Status",
+        field: "isCreditHold",
+        targetAnnotation: ""
+      });
+      Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
+        fieldGroup: "Status",
+        field: "hasAttachments",
+        targetAnnotation: ""
+      });
+    });
 
-        opaTest("Check header facets of the Object Page", function (Given, When, Then) {
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckHeaderFacet({ facetId: "FieldGroup::Amounts" });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Amounts",
-                field: "netAmount",
-                targetAnnotation: ""
-            });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Amounts",
-                field: "taxAmount",
-                targetAnnotation: ""
-            });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Amounts",
-                field: "grossAmount",
-                targetAnnotation: ""
-            });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Amounts",
-                field: "currency",
-                targetAnnotation: ""
-            });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckHeaderFacet({ facetId: "FieldGroup::Status" });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Status",
-                field: "status_code",
-                targetAnnotation: ""
-            });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Status",
-                field: "priority_code",
-                targetAnnotation: ""
-            });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Status",
-                field: "isBlocked",
-                targetAnnotation: ""
-            });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Status",
-                field: "isCreditHold",
-                targetAnnotation: ""
-            });
-            Then.onTheSalesOrdersObjectPageGenerated.onHeader().iCheckFieldInFieldGroup({
-                fieldGroup: "Status",
-                field: "hasAttachments",
-                targetAnnotation: ""
-            });
-        });
+    opaTest("Check the number of sections of the Object Page", function (_Given, _When, Then) {
+      Then.onTheSalesOrdersObjectPageGenerated.iCheckNumberOfSections(3);
+    });
 
-        opaTest("Check the number of sections of the Object Page", function (_Given, _When, Then) {
-            Then.onTheSalesOrdersObjectPageGenerated.iCheckNumberOfSections(3);
-        });
+    opaTest("Check the Overview section of the Object Page", function (_Given, When, Then) {
+      When.onTheSalesOrdersObjectPageGenerated.iGoToSection({ section: "Overview" });
+      Then.onTheSalesOrdersObjectPageGenerated.iCheckSection({ section: "Overview" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "orderNumber" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "customerName" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "customerEmail" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "orderDate" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "requestedDelivery" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "salesOrg" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "distributionChannel" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "division" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "netAmount" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "taxAmount" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "grossAmount" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "currency" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "status_code" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "priority_code" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "isBlocked" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "isCreditHold" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "hasAttachments" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "s4DocumentNumber" });
+      Then.onTheSalesOrdersObjectPageGenerated
+        .onForm({ section: "Overview" })
+        .iCheckField({ property: "s4CreatedByUser" });
+    });
 
-        opaTest("Check the Overview section of the Object Page", function (_Given, When, Then) {
-            When.onTheSalesOrdersObjectPageGenerated.iGoToSection({ section: "Overview" });
-            Then.onTheSalesOrdersObjectPageGenerated.iCheckSection({ section: "Overview" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "orderNumber" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "customerName" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "customerEmail" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "orderDate" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "requestedDelivery" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "salesOrg" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "distributionChannel" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "division" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "netAmount" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "taxAmount" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "grossAmount" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "currency" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "status_code" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "priority_code" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "isBlocked" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "isCreditHold" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "hasAttachments" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "s4DocumentNumber" });
-            Then.onTheSalesOrdersObjectPageGenerated.onForm({ section: "Overview" }).iCheckField({ property: "s4CreatedByUser" });
-        });
+    opaTest("Check the Items section of the Object Page", function (_Given, When, Then) {
+      When.onTheSalesOrdersObjectPageGenerated.iGoToSection({ section: "Items" });
+      Then.onTheSalesOrdersObjectPageGenerated.iCheckSection({ section: "Items" });
+    });
 
-        opaTest("Check the Items section of the Object Page", function (_Given, When, Then) {
-            When.onTheSalesOrdersObjectPageGenerated.iGoToSection({ section: "Items" });
-            Then.onTheSalesOrdersObjectPageGenerated.iCheckSection({ section: "Items" });
-        });
+    opaTest("Check the Notes section of the Object Page", function (_Given, When, Then) {
+      When.onTheSalesOrdersObjectPageGenerated.iGoToSection({ section: "Notes" });
+      Then.onTheSalesOrdersObjectPageGenerated.iCheckSection({ section: "Notes" });
+    });
 
-        opaTest("Check the Notes section of the Object Page", function (_Given, When, Then) {
-            When.onTheSalesOrdersObjectPageGenerated.iGoToSection({ section: "Notes" });
-            Then.onTheSalesOrdersObjectPageGenerated.iCheckSection({ section: "Notes" });
-        });
+    opaTest("Teardown", function (Given, When, Then) {
+      // Cleanup
+      Given.iTearDownMyApp();
+    });
+  }
 
-        opaTest("Teardown", function (Given, When, Then) { 
-            // Cleanup
-            Given.iTearDownMyApp();
-        });
-    }
-
-    runner.run([journey]);
+  runner.run([journey]);
 });

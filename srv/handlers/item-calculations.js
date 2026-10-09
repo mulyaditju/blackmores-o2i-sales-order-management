@@ -3,13 +3,10 @@
 // CAP-aware event handlers for sales order item amount calculations.
 // Delegates math to srv/lib/order-calculations.js (pure functions).
 // =============================================================================
-import cds from '@sap/cds';
-import {
-  calculateItemAmounts,
-  rollUpOrderAmounts,
-} from '../lib/order-calculations.js';
+import cds from "@sap/cds";
+import { calculateItemAmounts, rollUpOrderAmounts } from "../lib/order-calculations.js";
 
-const log = cds.log('sales-order');
+const log = cds.log("sales-order");
 
 /**
  * Registers item calculation handlers on the service.
@@ -22,7 +19,7 @@ export function registerItemCalculationHandlers(srv) {
   // -------------------------------------------------------------------------
   // BEFORE CREATE/UPDATE on SalesOrderItems – compute derived amounts
   // -------------------------------------------------------------------------
-  srv.before(['CREATE', 'UPDATE'], SalesOrderItems, (req) => {
+  srv.before(["CREATE", "UPDATE"], SalesOrderItems, (req) => {
     const item = req.data;
     if (item.quantity !== null && item.unitPrice !== null) {
       const amounts = calculateItemAmounts(item);
@@ -33,24 +30,20 @@ export function registerItemCalculationHandlers(srv) {
   // -------------------------------------------------------------------------
   // AFTER CREATE/UPDATE/DELETE on SalesOrderItems – roll up to order header
   // -------------------------------------------------------------------------
-  srv.after(['CREATE', 'UPDATE', 'DELETE'], SalesOrderItems, async (_, req) => {
-    const correlationId = req.headers?.['x-correlation-id'] ?? 'n/a';
+  srv.after(["CREATE", "UPDATE", "DELETE"], SalesOrderItems, async (_, req) => {
+    const correlationId = req.headers?.["x-correlation-id"] ?? "n/a";
     const orderId = req.data?.order_ID ?? req.data?.order?.ID;
     if (!orderId) return;
 
     // Batch-read all items for this order (no N+1 loop)
-    const items = await SELECT
-      .from(SalesOrderItems, ['netAmount', 'taxAmount', 'grossAmount'])
+    const items = await SELECT.from(SalesOrderItems, ["netAmount", "taxAmount", "grossAmount"])
       .where({ order_ID: orderId })
       .via(req.tx);
 
     const totals = rollUpOrderAmounts(items);
 
-    await UPDATE(SalesOrders)
-      .set(totals)
-      .where({ ID: orderId })
-      .via(req.tx);
+    await UPDATE(SalesOrders).set(totals).where({ ID: orderId }).via(req.tx);
 
-    log.info({ correlationId, orderId }, 'Order header amounts rolled up from items');
+    log.info({ correlationId, orderId }, "Order header amounts rolled up from items");
   });
 }

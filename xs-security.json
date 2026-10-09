@@ -18,25 +18,19 @@
     {
       "name": "SalesOrderViewer",
       "description": "generated",
-      "scope-references": [
-        "$XSAPPNAME.SalesOrderViewer"
-      ],
+      "scope-references": ["$XSAPPNAME.SalesOrderViewer"],
       "attribute-references": []
     },
     {
       "name": "SalesOrderEditor",
       "description": "generated",
-      "scope-references": [
-        "$XSAPPNAME.SalesOrderEditor"
-      ],
+      "scope-references": ["$XSAPPNAME.SalesOrderEditor"],
       "attribute-references": []
     },
     {
       "name": "SalesOrderManager",
       "description": "generated",
-      "scope-references": [
-        "$XSAPPNAME.SalesOrderManager"
-      ],
+      "scope-references": ["$XSAPPNAME.SalesOrderManager"],
       "attribute-references": []
     }
   ]
